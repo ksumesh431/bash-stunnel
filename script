@@ -1,0 +1,20 @@
+#!/bin/bash
+
+# Code to fetch port from last entry and increment by 1
+x=$(tail -1 stunnel.config)
+y=$(echo $x | grep -o [0-9]*$)
+incremented_port=$(echo "$y + 1" | bc)
+
+# echo $incremented_port
+client_id="willtx"
+
+printf '%s\n' \
+       "[${client_id}-pd-db]" \
+       "client = yes" \
+       "accept = 0.0.0.0:${incremented_port}" \
+       "connect = gw-a.${client_id}.ferp.io:10001" \
+       "cert = /etc/stunnel/stunnel.pem" \
+       "n=${incremented_port}" \
+       '' \
+       >> test.config
+
